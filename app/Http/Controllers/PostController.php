@@ -13,7 +13,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::all();
-        return view('posts.index');
+        return view('posts.index', compact('posts'));
     }
 
     /**
@@ -28,23 +28,24 @@ class PostController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        $data = [
-            'title' => $request->title,
-            'content' => $request->content
-        ];
+{
+    $validated = $request->validate([
+        'title' => 'required|unique:posts|max:255',
+        'content' => 'required'
+    ]);
 
-        Post::create($data);
+    Post::create($validated);
 
-        return redirect('/posts');
-    }
+    return redirect()->route('posts.index');
+}
 
     /**
      * Display the specified resource.
      */
-    public function show()
+    public function show($id)
     {
-        return view('posts.show', ['post' => $post]);
+        $post = Post::find($id);
+        return view('posts.show', compact('post'));
     }
     
     /**
@@ -53,7 +54,7 @@ class PostController extends Controller
     public function edit($id)
     {
         $post = Post::find($id);
-        return view('posts.edit', ['post' => $post]);
+        return view('posts.edit', compact('post'));
     }
 
     /**

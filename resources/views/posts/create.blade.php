@@ -10,5 +10,14 @@
         <textarea name="content" id="content"></textarea>
         <br>
         <input type="submit" value="Create">
+        @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
     </form>
 </x-app-layout>
